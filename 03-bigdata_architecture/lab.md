@@ -110,76 +110,87 @@
 ## 3. Схема архитектуры
 
 ```mermaid
+%%{init: {'theme': 'neutral', 'themeVariables': {
+    'primaryColor': '#e8f4ff',
+    'edgeLabelBackground':'#f0f0f0',
+    'tertiaryColor': '#f9f9f9',
+    'fontSize': '13px',
+    'fontFamily': 'Inter, Arial, sans-serif'
+}}}%%
+
 flowchart TB
 
 %% === Источники данных ===
-subgraph A["🧬 Source Layer"]
-A1["EMR / EHR<br>📋 Электронные медкарты"]
-A2["LIMS / LIS<br>🧫 Лабораторные системы"]
-A3["NGS Sequencers<br>🧬 FASTQ / BAM"]
-A4["Clinical Trials API<br>💊 Данные исследований"]
+subgraph A[" SOURCE LAYER — Источники данных"]
+direction TB
+A1["🧫 NGS Sequencers<br><i>FASTQ / BAM</i>"]
+A2["📋 EMR / EHR<br><i>Электронные медкарты</i>"]
+A3["🧪 LIMS / LIS<br><i>Лабораторные системы</i>"]
+A4["💊 Clinical Trials API<br><i>Клинические данные</i>"]
 end
 
 %% === Сбор данных ===
-subgraph B["📡 Data Collection Layer"]
-B1["<img src='https://upload.wikimedia.org/wikipedia/commons/0/0b/Logstash_logo.svg' width='40'/> Logstash"]
-B2["<img src='https://upload.wikimedia.org/wikipedia/commons/8/88/Apache_Kafka_logo.svg' width='40'/> Kafka"]
-B3["<img src='https://orthanc.uclouvain.be/img/orthanc-logo.svg' width='40'/> Orthanc"]
+subgraph B[" DATA COLLECTION LAYER — Сбор данных"]
+direction TB
+B1["<img src='./files/logstash.png' width='60'><br>Logstash"]
+B2["<img src='./files/kafka.png' width='70'><br>Apache Kafka"]
 end
 
-%% === Хранилище ===
-subgraph C["💾 Data Storage Layer"]
-C1["<img src='https://upload.wikimedia.org/wikipedia/commons/2/29/Postgresql_elephant.svg' width='40'/> PostgreSQL"]
-C2["<img src='https://upload.wikimedia.org/wikipedia/commons/4/4e/MinIO_logo.svg' width='50'/> MinIO Object Storage"]
-C3["<img src='https://upload.wikimedia.org/wikipedia/commons/5/59/ClickHouse.png' width='40'/> ClickHouse"]
+%% === Хранилище данных ===
+subgraph C[" DATA STORAGE LAYER — Хранение данных"]
+direction TB
+C1["<img src='./files/postgresql.png' width='50'><br>PostgreSQL<br><i>метаданные</i>"]
+C2["<img src='./files/minio.png' width='60'><br>MinIO<br><i>объектное хранилище</i>"]
+C3["<img src='./files/clickhouse.svg' width='70'><br>ClickHouse<br><i>аналитика</i>"]
 end
 
 %% === Обработка данных ===
-subgraph D["⚙️ Data Processing Layer"]
-D1["<img src='https://upload.wikimedia.org/wikipedia/commons/f/f3/Apache_Spark_logo.svg' width='40'/> Apache Spark"]
-D2["<img src='https://upload.wikimedia.org/wikipedia/commons/0/06/Apache_Flink_logo.svg' width='40'/> Apache Flink"]
-D3["<img src='https://mlflow.org/docs/latest/_static/MLflow-logo-final-black.png' width='40'/> MLflow"]
+subgraph D[" DATA PROCESSING LAYER — Обработка данных"]
+direction TB
+D1["<img src='./files/spark.png' width='70'><br>Apache Spark<br><i>ETL и batch</i>"]
+D2["<img src='./files/flink.png' width='60'><br>Apache Flink<br><i>stream-процессы</i>"]
+D3["<img src='./files/mlflow.png' width='60'><br>MLflow<br><i>эксперименты ML</i>"]
 end
 
 %% === Машинное обучение ===
-subgraph E["🧠 ML & Analytics Layer"]
-E1["<img src='https://upload.wikimedia.org/wikipedia/commons/3/38/Jupyter_logo.svg' width='40'/> Jupyter Notebooks"]
-E2["<img src='https://upload.wikimedia.org/wikipedia/commons/1/10/Tableau_Logo.png' width='40'/> Tableau"]
-E3["<img src='https://superset.apache.org/img/logo_sq_sp.svg' width='40'/> Apache Superset"]
+subgraph E[" ANALYTICS & ML LAYER — Аналитика и машинное обучение"]
+direction TB
+E1["<img src='./files/jypiter.png' width='60'><br>Jupyter Notebooks<br><i>исследования</i>"]
+E2["<img src='./files/superset.png' width='60'><br>Apache Superset<br><i>дашборды</i>"]
+E3["<img src='./files/tavleu.png' width='70'><br>Tableau<br><i>визуализация</i>"]
 end
 
-%% === Управление и оркестрация ===
-subgraph F["🛠️ Orchestration & Monitoring Layer"]
-F1["<img src='https://airflow.apache.org/docs/apache-airflow/stable/_images/pin_large.png' width='40'/> Apache Airflow"]
-F2["<img src='https://upload.wikimedia.org/wikipedia/commons/3/38/Prometheus_software_logo.svg' width='40'/> Prometheus"]
-F3["<img src='https://upload.wikimedia.org/wikipedia/commons/a/a1/Grafana_logo.svg' width='40'/> Grafana"]
-F4["<img src='https://upload.wikimedia.org/wikipedia/commons/9/97/Elastic_logo.svg' width='40'/> ELK Stack"]
+%% === Оркестрация и мониторинг ===
+subgraph F[" ORCHESTRATION & MONITORING — Оркестрация и мониторинг"]
+direction TB
+F1["<img src='./files/airflow.png' width='60'><br>Apache Airflow<br><i>оркестрация</i>"]
+F2["<img src='./files/prometheus.png' width='60'><br>Prometheus<br><i>мониторинг</i>"]
+F3["<img src='./files/grafana.png' width='60'><br>Grafana<br><i>дашборды состояния</i>"]
 end
 
 %% === Управление метаданными ===
-subgraph G["📚 Data Management Layer"]
-G1["<img src='https://open-metadata.org/img/logo.svg' width='40'/> OpenMetadata"]
+subgraph G[" DATA MANAGEMENT — Управление метаданными"]
+direction TB
+G1["<img src='./files/openmetadata.png' width='60'><br>OpenMetadata<br><i>каталог и lineage</i>"]
 end
 
 %% === Потоки данных ===
-A1 --> B1
-A2 --> B1
-A3 --> B2
-A4 --> B2
+A1 -->|NGS Data| B2
+A2 -->|Clinical Data| B1
+A3 -->|Lab Data| B1
+A4 -->|Trial API| B2
 
 B1 --> C1
 B2 --> C2
-B3 --> C3
-
 C1 --> D1
 C2 --> D1
 C3 --> D2
 
 D1 --> E1
-D2 --> E2
-E1 --> E3
+D2 --> E3
+E1 --> E2
 
-E3 --> F1
+E2 --> F1
 F1 --> F2
 F2 --> F3
 F3 --> G1
